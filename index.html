@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="font.css" />
+  </head>
+  <body class="flex flex-col justify-center">
+    <nav>
+      <div class="flex flex-row m-10 items-center">
+        <img class="w-20 h-20" src="images/qls.png" alt="" />
+        <h1 class="ml-10 text-center font-bold text-xl">AP Program - QPLS</h1>
+      </div>
+    </nav>
+
+    <div class="flex justify-center items-center font-sans">
+      <section class="flex flex-row gap-20">
+        <div class="flex flex-col">
+          <h1 class="text-center font-bold text-lg">Login</h1>
+          <form id="myForm" class="flex flex-col items-center mt-5">
+            <input
+              type="text"
+              name="mail"
+              placeholder="Email"
+              required
+              class="w-64 p-2 border border-gray-300 rounded mb-4"
+            />
+            <input
+              type="text"
+              name="id"
+              placeholder="ID"
+              required
+              class="w-64 p-2 border border-gray-300 rounded mb-4"
+            />
+            <button
+              type="submit"
+              class="bg-orange-500 text-white px-4 py-1 rounded hover:bg-orange-600"
+            >
+              Submit
+            </button>
+          </form>
+
+          <script>
+            document
+              .getElementById("myForm")
+              .addEventListener("submit", async function (event) {
+                event.preventDefault(); // Prevents the default form submission
+
+                const formData = new FormData(this);
+                const mail = formData.get("mail");
+                const id = formData.get("id");
+
+                try {
+                  const response = await fetch(
+                    `http://localhost:3000/api/getOne/${id}/${mail}`
+                  ); // Replace with your actual endpoint URL
+                  const data = await response.json();
+                  console.log(data);
+                  document.getElementById("initial").innerHTML = data.initial;
+                  document.getElementById("subject").innerHTML = data.subject;
+                  document.getElementById("username").innerHTML = data.username;
+                  document.getElementById("password").innerHTML = data.password;
+                } catch (error) {
+                  console.error(error);
+                  alert(
+                    `Your credentials are incorrect!\nNotice: Credentials are case-sensitive.`
+                  );
+                }
+              });
+          </script>
+        </div>
+
+        <div class="flex flex-col items-center font-sans">
+          <h1 class="text-center font-bold text-lg">Information</h1>
+          <div class="flex flex-col mt-5 items-center">
+            <span
+              >Initials:
+              <span class="font-bold" id="initial">______________</span></span
+            >
+            <span
+              >Subject:
+              <span class="font-bold" id="subject">______________</span></span
+            >
+            <span
+              >Username:
+              <span class="font-bold" id="username">______________</span></span
+            >
+            <span
+              >Password:
+              <span class="font-bold" id="password">______________</span></span
+            >
+          </div>
+        </div>
+      </section>
+    </div>
+  </body>
+</html>
