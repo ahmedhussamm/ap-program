@@ -17,48 +17,43 @@
 
     <!-- Admin Form -->
     <div class="flex flex-col">
-      <h2 class="text-center text-lg font-bold">Admin Panel</h2>
-      <form id="adminForm" class="flex flex-col items-center mt-2">
+      <h2 class="text-center text-lg font-bold">Update User</h2>
+      <form id="updateUserForm" class="flex flex-col items-center mt-2">
         <input
           type="text"
-          name="mail"
-          placeholder="Email"
+          name="updateEmail"
+          placeholder="User's Email"
           required
           class="px-3 py-2 border border-gray-300 rounded mb-2"
         />
         <input
           type="text"
-          name="pass_link"
-          placeholder="ID"
-          required
+          name="updateSubject"
+          placeholder="New Subject"
           class="px-3 py-2 border border-gray-300 rounded mb-2"
         />
         <input
           type="text"
-          name="initial"
-          placeholder="Initial"
-          required
+          name="updateID"
+          placeholder="New ID"
           class="px-3 py-2 border border-gray-300 rounded mb-2"
         />
         <input
           type="text"
-          name="subject"
-          placeholder="Subject"
-          required
+          name="updateInitial"
+          placeholder="New Initial"
           class="px-3 py-2 border border-gray-300 rounded mb-2"
         />
         <input
           type="text"
-          name="username"
-          placeholder="Username"
-          required
+          name="updateUsername"
+          placeholder="New Username"
           class="px-3 py-2 border border-gray-300 rounded mb-2"
         />
         <input
           type="string"
-          name="password"
-          placeholder="Password"
-          required
+          name="updatePassword"
+          placeholder="New Password"
           class="px-3 py-2 border border-gray-300 rounded mb-2"
         />
 
@@ -75,20 +70,25 @@
           type="submit"
           class="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600"
         >
-          Add User
+          Update User
         </button>
       </form>
     </div>
 
     <script>
       document
-        .getElementById("adminForm")
+        .getElementById("updateUserForm")
         .addEventListener("submit", async function (event) {
           event.preventDefault(); // Prevents the default form submission
 
           const adminPassword = atob("QUhNRURodXNzYW1RSVMxMjM=");
 
           // Check if the admin password is correct
+          console.log(
+            "Entered Password:",
+            document.getElementById("adminPassword").value
+          );
+
           if (
             adminPassword !== document.getElementById("adminPassword").value
           ) {
@@ -97,40 +97,38 @@
           }
 
           const formData = new FormData(this);
-          const initial = formData.get("initial");
-          const email = formData.get("mail");
-          const id = formData.get("pass_link");
-          const subject = formData.get("subject");
-          const username = formData.get("username");
-          const password = formData.get("password");
+          const email = formData.get("updateEmail");
+          const subject = formData.get("updateSubject");
+          const username = formData.get("updateUsername");
+          const password = formData.get("updatePassword");
+          const id = formData.get("updateID");
+          const initial = formData.get("updateInitial");
 
           try {
             const response = await fetch(
-              `https://api-jk0i.onrender.com/api/post`, // Replace with your actual endpoint URL
+              `https://api-jk0i.onrender.com/api/update/${email}`, // Replace with your actual endpoint URL
               {
-                method: "POST",
+                method: "PATCH", // Use PATCH method for updating
                 headers: {
                   "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
                   initial: initial,
-                  mail: email,
                   subject: subject,
                   username: username,
                   password: password,
                   pass_link: id,
-                  id_main: id,
                 }),
               }
             );
 
             if (!response.ok) {
-              throw new Error("Failed to add user.");
+              throw new Error("Failed to update user.");
             }
 
             const data = await response.json();
             console.log(data);
-            alert("User added successfully!");
+            alert("User updated successfully!");
           } catch (error) {
             console.error(error);
             alert(error.message);
